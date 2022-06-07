@@ -1,0 +1,63 @@
+	<div id="" style="display: inline-block;">
+	<form method="post"action="delMutil.php">
+	 <table border="4" style="width:50%;border-collapse: collapse;border: 0px;
+    border-collapse: collapse;
+    margin: auto;
+    margin-top: ;
+    text-align: center;width: 1000px;">
+	  
+	     <tr style="background-color:#63854e"><td>id</td><td>店家名称</td><td>发布时间</td><td>操作</td></tr>
+	   <?php foreach($data as $v):?>
+	     <tr style="color:#f50712 ">
+			 <td><?php echo $v['id'];?></td>
+	         <td>
+					<input type="checkbox" name="id[]" value="<?php echo $v['id'];?>" />
+					<a href="./show.php?id=<?php echo $v['id'];?>"><?php echo $v['title'];?></a></td>
+	         <td><?php echo $v['time'];?></td>
+	         <td>
+	             <a href="edit.php?id=<?php echo $v['id'];?>">编辑</a>
+	             <a href="del.php?id=<?php echo $v['id'];?>" onclick="return confirm('确定要删除该店铺吗？');">删除</a>
+	         </td>
+	         <!-- <td>编辑 删除</td> -->
+	     </tr>
+		 
+
+	     <?php endforeach;?>
+	   
+	 
+	     <!-- <a href="edit.php?id=<?php echo $v['id'];?>">编辑</a> -->
+	 </table>
+		<div  >
+		<div style="margin: auto;margin-left: 43%;"><?php echo $page_html?></div>
+		<div class="action" style="margin: auto;margin-left: 45%;"">
+			<button id="checkAll" class="btn btn-outline-danger">全选</button>
+			<button id="checkReverse" class="btn btn-outline-danger">反选</button>
+			<input type="submit" value="批量删除" / class="btn btn-outline-danger">
+		</div>
+		</div>
+		</form>
+	</div>
+		</div>
+	</body>
+</html>
+
+	<script>
+		//点亮当前菜单链接
+		setMenu('dp');
+		document.getElementById("checkAll").onclick = function(){
+			var ids = document.getElementsByName("id[]");
+			for(var i in ids){
+				ids[i].checked =true;
+			}
+			return false;
+		}
+		// 反选
+		document.getElementById("checkReverse").onclick = function(){
+			var ids = document.getElementsByName("id[]");
+			for(var i in ids){
+				ids[i].checked =!ids[i].checked;
+			}
+			return false;
+		}
+	</script>
+

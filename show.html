@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>食|<?php echo $data['title'];?></title>
+		<script src="js/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		 <link rel="stylesheet" href="css/font-awesome.min.css">
+		  <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+		  <link rel="stylesheet" href="css/index.css">
+		  <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=A2bTM7WEVlIYo8doM6KIBo8QDxHE2EtZ"></script>
+		  <style>
+		    .wrapper {
+		      width: 60%;
+		      height: 400px;
+		      border: 1px solid #ccc;
+		      overflow: hidden;
+		      position: relative;
+			  margin:auto;
+		    }
+		  
+		    div p {
+		      text-align: center;
+		    }
+			.carousel-item img{
+				width: 100% !important;
+				  display: block !important;
+				
+			}
+			#allmap {width: 80%;height:900px;margin:auto;}
+		  </style>
+	</head>
+<body style="background-color: #932222;width: 1525px;margin: auto;">
+    <div style="text-align: center;color: #ffbf7e;"><h1><?php echo $data['title'];?></h1></div>
+	
+	<div style="text-align: center;"><?php echo $data['time'];?></div>
+	
+    <div style="text-align: center;"><?php echo $data['id'];?></div>
+	 
+	<div id="carouselExampleIndicators" class="carousel slide  col-lg-4 mb-6 col-md-10" data-ride="carousel" style=" margin: auto;">
+		  
+		  <div class="carousel-inner">
+			  <div class="carousel-item active">
+			    <img src="img/xl1.jpg" class="d-block w-100" alt="...">
+			  </div>
+			  <?php
+			  
+			  
+			   $path = substr($path,$album_path_len);
+			  	$view_flow = function() use ($filelist,$path){
+			  		$flow = array();
+			  		for($i=0,$j=0,$len=count($filelist);$i<$len;++$i){
+			  			$flow[$j][] = $filelist[$i];
+			  			$j = ($j==11) ? 0 : ++$j;
+			  		}
+			  		foreach($flow as $v){
+			  			echo '<div class="carousel-item">';
+			  			foreach($v as $vv){
+			  				$filename = basename($vv);
+			  			echo "<img src=\"$vv\"/>";
+			  			}
+			  			echo '</div>';
+			  		}
+			  	};
+			  	$view_flow();
+			  ?>
+			  </div>
+		  <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Previous</span>
+		  </button>
+		  <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Next</span>
+		  </button>
+		</div>
+		
+	
+		
+		<div style="text-align: center;"><?php echo$data['content'];?></div>
+		
+		
+		<div class="xbt "><h1 class="text-warning" style="">点单推荐</h1></div>
+		<!-- 内容 -->
+			<div style="text-align: center; width: 90%;left: 0; top: 0; margin: auto;" class="row" >
+	
+		<div data-spy="scroll" data-target="#list-example" data-offset="0" id="wrapper" class="scrollspy-example wrapper mb-5 col-md-9">
+			<div id="tips" style="color: #ffbf7e;">
+				<?php echo$data['Details'];?>
+		</div>
+		</div>
+		</div>
+		<!-- 地址 -->
+		<div class="xbt "><h2 class="text-warning" style="">🏠:<?php echo $data['title'];?>
+
+📍:<?php echo $data['address'];?></h2></div>
+		<div id="allmap"></div>
+		
+		<!-- 底部 -->
+		<footer class="bg-dark p-4 text-light text-center ">
+		  <div class="container">
+		    <h3>个人网站</h3>
+		    <h4>欢迎投稿</h4>
+		    <p class="m-1">联系方式 | 合作事宜 | 版权投诉</p>
+		    <p>闽LIAO 备12345678. © 2019-2025 liaowenjie. 1204045128@Qq.com.</p>
+		  </div>
+		</footer>
+	</body>
+</html>
+<script>
+
+</script>
+ <script src="js/iscroll.js"></script>
+  <script>
+  
+    var myScroll = new IScroll('#wrapper', {
+      mouseWheel: true,
+      scrollbars: true
+    });
+	
+	// 百度地图API功能
+	var map = new BMap.Map("allmap");    // 创建Map实例
+	map.centerAndZoom(new BMap.Point(<?php echo $data['coordinate'];?>), 19);  // 初始化地图,设置中心点坐标和地图级别
+	//添加地图类型控件
+	map.addControl(new BMap.MapTypeControl({
+		mapTypes:[
+	        BMAP_NORMAL_MAP,
+	        BMAP_HYBRID_MAP
+	    ]}));	  
+	map.setCurrentCity("福州");          // 设置地图显示的城市 此项是必须设置的
+	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+  </script>
+
+
+</body>
+</html>

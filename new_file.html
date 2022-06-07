@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+	<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=A2bTM7WEVlIYo8doM6KIBo8QDxHE2EtZ"></script>
+	<title>地图展示</title>
+	<script src="js/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="bootstrap/dist/js/bootstrap.js"></script>
+	 <!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
+	  <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+	  <script src="js/jquery.min.js"></script>
+	  <style>
+	  .pagelist{padding:20px;border-top:1px solid #dadada;text-align:center;}
+.pagelist span{margin-right:10px;}
+.pagelist a{margin:0 5px;color:#007bc4;text-decoration:none;}
+.pagelist a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+	<div style="text-align: center; width: 90%;left: 0; top: 0; margin: auto;" class="row content" >	
+	
+	</div>
+
+	<!-- 分页链接 -->
+	<div class="pagelist"></div>
+</body>
+</html>
+<script>
+
+//实现无刷新分页
+(function(){
+	var page = 1;    //当前页
+	var total = 0;   //总记录数
+	var maxPage = 1; //总页数
+	var $content = $(".content");   //内容容器
+	var $pagelist = $(".pagelist");  //分页链接容器
+	
+	getData(); //自动获取第1页的数据
+	
+	//获取指定页的数据
+	function getData(){
+		$.ajax({
+			type: "GET",
+			url:  "./fy.php",
+			data:{"page": page},
+			dataType:"json",
+			success: function(json){
+				total = json.total;     //总记录数
+				maxPage = json.maxPage; //总页数
+				content(json.list);     //生成内容
+			},
+			complete: function(){
+				pageList();   //生成分页链接
+			},
+			error: function(){
+				alert('请求发生错误。');
+			}
+		});
+	}
+	//生成分页链接
+	function pageList() {
+		//防止超过最大、最小页数
+		page = Math.min(page, maxPage);
+		page = Math.max(page, 1);
+		//拼接链接
+		var html = '<div><span>共' + total + '条，第' + page + '/' + maxPage + '页</span>';
+		html += '<a href="#" data-page="1">首页</a>';
+		html += (page>1) ? '<a href="#" data-page="' + (page-1) + '">上一页</a>' : '<a href="#" data-page="1">上一页</a>';
+		html += (page<maxPage) ? '<a href="#" data-page="' + (page+1) + '">下一页</a>' : '<a href="#" data-page="' + maxPage + '">下一页</a>';
+		html += '<a href="#" data-page="' + maxPage + '">尾页</a></div>';
+		var $html = $(html);
+		//为链接添加单击事件
+		$html.find("a").click(function(){
+			page = $(this).attr("data-page");
+			getData();
+		});
+		$pagelist.html($html);
+	}
+	//生成内容
+	function content(list){
+		//拼接内容
+		var html = "";
+		for(var i in list){
+			// html += '<li><img src="'+list[i]['pic']+'" /><p><a href="#">'+list[i]['title']+'</a></p></li>';
+			html += '<div class="card col-lg-3 col-md-6 mb-5" style="width: 18rem; display:inline-block;"><img src="'+list[i]['pic']+'" class="card-img-top" alt="..."><div class="card-body"><h5 class="card-title h5">'+list[i]['title']+'</h5><p class="card-text p">'+list[i]['content']+'️</p><a href="#" class="btn btn-primary" data-toggle="tooltip" title="点击进入详情">去吃去吃</a></div></div>';
+		}
+		//将内容显示到网页中
+		$content.html(html);
+	}
+})();
+
+</script>

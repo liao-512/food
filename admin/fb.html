@@ -1,0 +1,130 @@
+
+	<div id="" style="display: inline-block; vertical-align: top;">
+		<form id="form" method="post">
+		
+		<table border="" cellspacing="" cellpadding="">
+		
+		<tr><th>店家名称：<td><input type="text" name="title" /><span style="" class="tip"></span></th><td>
+		<p class="">商品名称长度在2~50个字符之间。</p></td></tr>
+		<tr><th>图片上传：<td><input type="file" name="file" id="file"></th><td>
+		<p class="rule">上传封面图。</p>
+		</td></tr></br>
+		<tr><th>店家地址：<td><input type="text" name="address" /></th><td>
+		<p class="rule">店铺的详细的地址。</p>
+		</td></tr>
+		<tr><th>店家坐标：<td><input type="text" name="coordinate" /><a href="http://api.map.baidu.com/lbsapi/getpoint/index.html" target="_blank">点击去获取坐标</a>
+		</th><td>
+		<p class="rule">店铺的百度坐标。</p>
+		</td></tr>
+
+		<tr><th>店铺简单介绍：<td><textarea name="content" style="height: 100px;width: 500px;"></textarea><span style="" class="tip"></span></th><td>
+		<p class="rule">商品简介在60个字符以内。</p></td></tr>
+		<tr><th>店铺详细介绍:<td><script id="editor" name="Details" type="text/plan" style="width: 800px;"> </script></th><td></td></tr>
+		
+		<tr><th></th><td><button type="reset" class="btn btn-outline-danger" style="margin-top: 10px; margin-left:40% ;">重置</button>
+		<input type="submit" class="btn btn-outline-danger" style="margin-top: 10px; " value="上传" id="upload"></td></tr>
+		
+		</table>
+		</form>
+	
+	<p>
+	    <span class="process"><i class="active" id="bar"></i></span>
+	    <span id="percent"></span>
+	</p>
+	<p id="tips"></p>
+	
+	</div>
+		</div>
+	</body>
+</html>
+   <script src="../ueditor/ueditor.config.js"></script>
+    <script src="../ueditor/ueditor.all.min.js"></script>
+	<script>
+		//点亮当前菜单链接
+		setMenu('fb');
+		UE.getEditor("editor");
+		
+		document.getElementById('upload').onclick = function(){
+		    //   console.log('上传开始');
+		      var xhr = new XMLHttpRequest();
+		      xhr.open('post','fb.php');
+		      var form = document.getElementById('form')
+		      var data = new FormData(form);
+		
+		var bar = document.getElementById('bar');
+		var percent = document.getElementById('precent');
+		
+		// var tips = document.getElementById('tips');
+		// tips.innerHTML = '';
+		
+		xhr.upload.onprogress = function(e){
+		    var num = Math.floor(e.loaded / e.total * 100);
+		    bar.style.width= num + '%';
+		    console.log(num);
+		    percent.innerHTML=num + '%';
+		}
+		xhr.onreadystatechange = function(){
+		    if(xhr.readyState === 4){
+		        if(xhr.status < 200 || xhr.status >= 300 && xhr.status !== 304){
+		            throw new Error('文件上传失败，服务器状态异常。');
+		        }
+		        var name = xhr.responseText;
+		        if(name == ''){
+		            throw new Error('服务器保存文件失败。');
+		        }
+		       
+		        // tips.innerHTML = '文件上传成功。<a href="./img/' + name +'">下载文件</a>';
+		    }
+		}
+		
+		      xhr.send(data);
+		  }
+		  
+		//为表单各字段添加鼠标移出事件
+		checkForm();
+		function checkForm(){
+			//为每个表单字段定义不同的验证函数
+			var validate = {
+				"title" : checkTitle,
+				// "file" : checkfile,
+				// "address" : checkaddress,
+				"content" : checkContent
+				// "stock": checkStock
+			};
+			var objs = [];
+			//绑定鼠标移出事件
+			for(var i in validate){
+				objs[i] = document.getElementsByName(i)[0];
+				objs[i].onblur = validate[i];
+			}
+			
+			//验证标题是否合法
+				function checkTitle(){
+					if(this.value.length>=2 && this.value.length<=50){
+						success(this,"填写正确");
+					}else{
+						error(this,"填写错误！！！！！！");
+					}
+				}
+				function checkContent(){
+						if(this.value.length<=60){
+							success(this,"填写正确");
+						}else{
+							error(this,"填写错误");
+						}
+					}
+				//验证通过
+				function success(obj,message){
+					var tipObj = obj.parentNode.getElementsByClassName("tip")[0];
+					tipObj.className = "tip tip-success";
+					tipObj.innerHTML = message;
+				}
+				//验证未通过
+				function error(obj,message){
+					var tipObj = obj.parentNode.getElementsByClassName("tip")[0];
+					tipObj.className = "tip tip-error";
+					tipObj.innerHTML = message;
+				}
+			}
+	</script>
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style type="text/css">
+	
+</style>
+<body>
+	
+	<p style="margin-left: 20%;">标题：</p>
+    <div style="text-align: center;"><h1><?php echo $data['title'];?></h1></div>
+	<p style="margin-left: 20%;">图片：</p>
+	<img src="../<?php echo $data['pic'];?>" width="200" style="margin-left:40% ;">
+	<p style="margin-left: 20%;">时间：</p>
+	<div style="text-align: center;"><?php echo $data['time'];?></div>
+	<p style="margin-left: 20%;">id：</p>
+    <div style="text-align: center;"><?php echo $data['id'];?></div>
+	<p style="margin-left: 20%;">地址：</p>
+	<div style="text-align: center;"><?php echo $data['address'];?></div>
+	<p style="margin-left: 20%;">坐标：</p>
+	<div style="text-align: center;"><?php echo $data['coordinate'];?></div>
+	<p style="margin-left: 20%;">内容：</p>
+    <div style="text-align: center;"><?php echo$data['content'];?></div>
+	<p style="margin-left: 20%;">详细内容：</p>
+	 <div style="text-align: center;"><?php echo$data['Details'];?></div>
+
+</body>
+</html>
